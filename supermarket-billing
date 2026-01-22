@@ -1,0 +1,89 @@
+class Product:
+    def __init__(self, product_id, name, price):
+        self.product_id = product_id
+        self.name = name
+        self.price = price
+
+
+class SupermarketBillingSystem:
+    def __init__(self):
+        self.products = {}
+        self.cart = {}
+
+    def add_products(self):
+        self.products["101"] = Product("101", "Rice", 60)
+        self.products["102"] = Product("102", "Sugar", 45)
+        self.products["103"] = Product("103", "Milk", 30)
+        self.products["104"] = Product("104", "Oil", 150)
+
+    def view_products(self):
+        print("\nAvailable Products")
+        print("ID | Name | Price")
+        print("-" * 25)
+        for p in self.products.values():
+            print(f"{p.product_id} | {p.name} | ₹{p.price}")
+
+    def add_to_cart(self):
+        pid = input("\nEnter Product ID: ")
+        if pid not in self.products:
+            print("Invalid Product ID")
+            return
+
+        qty = int(input("Enter Quantity: "))
+
+        if pid in self.cart:
+            self.cart[pid]["qty"] += qty
+        else:
+            self.cart[pid] = {
+                "name": self.products[pid].name,
+                "price": self.products[pid].price,
+                "qty": qty
+            }
+
+        print("Item added to cart")
+
+    def generate_bill(self):
+        if not self.cart:
+            print("\nCart is empty")
+            return
+
+        total = 0
+        print("\n===== Supermarket Bill =====")
+        print("Name | Price | Qty | Amount")
+        print("-" * 35)
+
+        for item in self.cart.values():
+            amount = item["price"] * item["qty"]
+            total += amount
+            print(f"{item['name']} | ₹{item['price']} | {item['qty']} | ₹{amount}")
+
+        print("-" * 35)
+        print(f"Total Amount: ₹{total}")
+        print("Thank you for shopping!")
+
+    def menu(self):
+        self.add_products()
+        while True:
+            print("\n===== Supermarket Billing System =====")
+            print("1. View Products")
+            print("2. Add to Cart")
+            print("3. Generate Bill")
+            print("4. Exit")
+
+            choice = input("Enter choice: ")
+
+            if choice == "1":
+                self.view_products()
+            elif choice == "2":
+                self.add_to_cart()
+            elif choice == "3":
+                self.generate_bill()
+            elif choice == "4":
+                print("Exiting system")
+                break
+            else:
+                print("Invalid choice")
+
+
+system = SupermarketBillingSystem()
+system.menu()
